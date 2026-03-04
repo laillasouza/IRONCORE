@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronCore | Halteres</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-dark bg-black shadow mb-5 border-bottom border-warning">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">IRONCORE</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row bg-secondary p-4 rounded shadow">
+            <div class="col-md-6">
+                <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600" class="img-fluid rounded" alt="Halteres">
+            </div>
+            <div class="col-md-6">
+                <h2 class="text-warning">Kit de Halteres Pro</h2>
+                <h3>R$ 1.200,00</h3>
+                
+                <ul class="list-group list-group-flush border rounded mb-4 mt-4">
+                    <li class="list-group-item bg-secondary text-white"><strong>Material:</strong> Aço Fundido</li>
+                    <li class="list-group-item bg-secondary text-white"><strong>Revestimento:</strong> Injetado em PVC</li>
+                    <li class="list-group-item bg-secondary text-white"><strong>Garantia:</strong> 12 meses</li>
+                </ul>
+
+                <form action="/salvar" method="POST" class="mb-4">
+                    <input type="hidden" name="item" value="Kit de Halteres Pro">
+                    <input type="hidden" name="origem" value="Pagina de Detalhes">
+                    <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">SOLICITAR ORÇAMENTO</button>
+                </form>
+
+                <div class="accordion" id="ac1">
+                    <div class="accordion-item bg-dark text-white">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button bg-dark text-white collapsed" data-bs-toggle="collapse" data-bs-target="#t1">
+                                Informações de Uso
+                            </button>
+                        </h2>
+                        <div id="t1" class="accordion-collapse collapse">
+                            <div class="accordion-body">Pegada ergonômica e antiderrapante para treinos intensos.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="/produto" class="btn btn-outline-light mt-4 w-100">Voltar para a Loja</a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronCore | Contato</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black border-bottom border-warning">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">IRON<span class="text-warning">CORE</span></a>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-md-5">
+                <div class="card bg-secondary text-white border-0 shadow mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold text-warning">QG Central</h4>
+                        <p>Av. Principal do Aço, 1000<br>Setor Industrial</p>
+                        <p class="mb-0"><strong>Tel:</strong> (11) 4002-8922</p>
+                    </div>
+                </div>
+
+                <h5 class="mb-3 fw-bold">Dúvidas Frequentes</h5>
+                <div class="accordion accordion-flush shadow rounded overflow-hidden" id="faqGym">
+                    <div class="accordion-item bg-secondary text-white">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button bg-secondary text-white collapsed" data-bs-toggle="collapse" data-bs-target="#f1">Entregam em todo o Brasil?</button>
+                        </h2>
+                        <div id="f1" class="accordion-collapse collapse" data-bs-parent="#faqGym">
+                            <div class="accordion-body">Sim! Enviamos via transportadora com seguro total da carga.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item bg-secondary text-white">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button bg-secondary text-white collapsed" data-bs-toggle="collapse" data-bs-target="#f2">Como funciona a garantia?</button>
+                        </h2>
+                        <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqGym">
+                            <div class="accordion-body">Equipamentos pesados têm 1 ano de garantia estrutural.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-7">
+                <div class="bg-black p-4 rounded shadow border border-secondary">
+                    <h3 class="fw-bold text-warning mb-4">Mande sua Mensagem</h3>
+                    
+                    <form action="/salvar" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Nome Completo</label>
+                            <input type="text" name="nome" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" name="email" class="form-control bg-dark text-white border-secondary" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mensagem</label>
+                            <textarea name="mensagem" class="form-control bg-dark text-white border-secondary" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">ENVIAR AGORA</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

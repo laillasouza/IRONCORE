@@ -6,45 +6,47 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 
-// Rotas das páginas
+// Rotas GET
 app.get('/', (req, res) => res.render('index'));
-app.get('/produto', (req, res) => res.render('produto'));
-app.get('/fotos', (req, res) => res.render('fotos'));
 app.get('/contato', (req, res) => res.render('contato'));
-app.get('/detalhes', (req, res) => res.render('detalhes'));
-app.get('/detalhes2', (req, res) => res.render('detalhes2'));
-app.get('/detalhes3', (req, res) => res.render('detalhes3'));
-
-// NOVA ROTA: Exibir registros do IronCore
 app.get('/registros', (req, res) => {
-    const caminhoArquivo = path.join(__dirname, 'data', 'contatos.json');
-    fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
+    const caminho = path.join(__dirname, 'data', 'dados.json');
+    fs.readFile(caminho, 'utf8', (err, data) => {
         let lista = [];
-        if (!err && data) {
-            try { lista = JSON.parse(data); } catch (e) { lista = []; }
-        }
+        if (!err && data) { try { lista = JSON.parse(data); } catch(e) { lista = []; } }
         res.render('exibirDados', { contatos: lista });
     });
 });
 
-// Rota POST corrigida para /salvar (conforme seu EJS)
+// Rota POST - CORRIGIDA PARA /salvar
 app.post('/salvar', (req, res) => {
     const novoContato = req.body;
-    const caminhoArquivo = path.join(__dirname, 'data', 'contatos.json');
+    const pasta = path.join(__dirname, 'data');
+    const arquivo = path.join(pasta, 'dados.json');
 
-    fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
+    // Cria pasta se não existir
+    if (!fs.existsSync(pasta)) fs.mkdirSync(pasta);
+    
+    fs.readFile(arquivo, 'utf8', (err, data) => {
         let lista = [];
-        if (!err && data) { lista = JSON.parse(data); }
+        // Se o arquivo tiver conteúdo, transforma em JSON
+        if (!err && data && data.trim() !== "") {
+            try { lista = JSON.parse(data); } catch (e) { lista = []; }
+        }
         
         lista.push(novoContato);
 
-        fs.writeFile(caminhoArquivo, JSON.stringify(lista, null, 2), (err) => {
-            if (err) return res.send("Erro no servidor");
-            // Nota: seu formulário usa name="nome", então passamos novoContato.nome
-            res.render('sucesso', { nome: novoContato.nome });
+        fs.writeFile(arquivo, JSON.stringify(lista, null, 2), (err) => {
+            if (err) return res.status(500).send("Erro ao salvar");
+            // Tenta renderizar sucesso. Se não existir, envia texto plano
+            try {
+                res.render('sucesso', { nome: novoContato.nome });
+            } catch (e) {
+                res.send("Dados salvos com sucesso!");
+            }
         });
     });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`IronCore rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));

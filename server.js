@@ -5,9 +5,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public')); // Para imagens e CSS futuro
 
-// Rotas do VerdeVida
+// Rotas das páginas
 app.get('/', (req, res) => res.render('index'));
 app.get('/produto', (req, res) => res.render('produto'));
 app.get('/fotos', (req, res) => res.render('fotos'));
@@ -16,27 +15,24 @@ app.get('/detalhes', (req, res) => res.render('detalhes'));
 app.get('/detalhes2', (req, res) => res.render('detalhes2'));
 app.get('/detalhes3', (req, res) => res.render('detalhes3'));
 
-// Rota para processar o formulário de contato
+// Rota POST - Salvando dados de forma ASSÍNCRONA (Desafio)
 app.post('/enviar', (req, res) => {
     const novoContato = req.body;
-    const caminhoArquivo = path.join(__dirname, 'data', 'mensagens.json');
-
-    // Cria a pasta 'data' se não existir
-    if (!fs.existsSync(path.join(__dirname, 'data'))) {
-        fs.mkdirSync(path.join(__dirname, 'data'));
-    }
+    const caminhoArquivo = path.join(__dirname, 'data', 'contatos.json');
 
     fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
         let lista = [];
         if (!err && data) { lista = JSON.parse(data); }
-        lista.push({ ...novoContato, data: new Date() });
+        
+        lista.push(novoContato);
 
+        // writeFile não trava o servidor enquanto grava (Melhor performance!)
         fs.writeFile(caminhoArquivo, JSON.stringify(lista, null, 2), (err) => {
-            if (err) return res.send("Erro ao salvar mensagem.");
-            res.render('sucesso', { nome: novoContato.nome });
+            if (err) return res.send("Erro no servidor");
+            res.render('sucesso', { nome: novoContato.nomeCompleto });
         });
     });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`VerdeVida rodando em http://localhost:${PORT}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

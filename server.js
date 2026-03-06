@@ -5,48 +5,59 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-// Rotas GET
+// Rotas do VerdeVida
 app.get('/', (req, res) => res.render('index'));
+app.get('/produto', (req, res) => res.render('produto'));
+app.get('/fotos', (req, res) => res.render('fotos'));
 app.get('/contato', (req, res) => res.render('contato'));
+app.get('/detalhes', (req, res) => res.render('detalhes'));
+app.get('/detalhes2', (req, res) => res.render('detalhes2'));
+app.get('/detalhes3', (req, res) => res.render('detalhes3'));
+
+// --- NOVA ROTA GET: EXIBIÇÃO DE DADOS (Requisito a e b) ---
 app.get('/registros', (req, res) => {
-    const caminho = path.join(__dirname, 'data', 'dados.json');
-    fs.readFile(caminho, 'utf8', (err, data) => {
+    const caminhoArquivo = path.join(__dirname, 'data', 'mensagens.json');
+
+    fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
         let lista = [];
-        if (!err && data) { try { lista = JSON.parse(data); } catch(e) { lista = []; } }
-        res.render('exibirDados', { contatos: lista });
+        if (!err && data) {
+            try {
+                // Converte os dados para objetos JSON em um vetor
+                lista = JSON.parse(data);
+            } catch (e) {
+                lista = [];
+            }
+        }
+        // Renderiza o EJS passando o vetor como parâmetro
+        res.render('exibirDados', { mensagens: lista });
     });
 });
 
-// Rota POST - CORRIGIDA PARA /salvar
-app.post('/salvar', (req, res) => {
+// Rota para processar o formulário
+app.post('/enviar', (req, res) => {
     const novoContato = req.body;
-    const pasta = path.join(__dirname, 'data');
-    const arquivo = path.join(pasta, 'dados.json');
+    const pastaData = path.join(__dirname, 'data');
+    const caminhoArquivo = path.join(pastaData, 'mensagens.json');
 
-    // Cria pasta se não existir
-    if (!fs.existsSync(pasta)) fs.mkdirSync(pasta);
-    
-    fs.readFile(arquivo, 'utf8', (err, data) => {
+    if (!fs.existsSync(pastaData)) { fs.mkdirSync(pastaData); }
+
+    fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
         let lista = [];
-        // Se o arquivo tiver conteúdo, transforma em JSON
-        if (!err && data && data.trim() !== "") {
-            try { lista = JSON.parse(data); } catch (e) { lista = []; }
+        if (!err && data && data.trim() !== "") { 
+            try { lista = JSON.parse(data); } catch(e) { lista = []; }
         }
         
-        lista.push(novoContato);
+        lista.push({ ...novoContato, data: new Date() });
 
-        fs.writeFile(arquivo, JSON.stringify(lista, null, 2), (err) => {
-            if (err) return res.status(500).send("Erro ao salvar");
-            // Tenta renderizar sucesso. Se não existir, envia texto plano
-            try {
-                res.render('sucesso', { nome: novoContato.nome });
-            } catch (e) {
-                res.send("Dados salvos com sucesso!");
-            }
+        fs.writeFile(caminhoArquivo, JSON.stringify(lista, null, 2), (err) => {
+            if (err) return res.send("Erro ao salvar mensagem.");
+            res.render('sucesso', { nome: novoContato.nome });
         });
     });
 });
 
+// Ajuste para o Render (process.env.PORT)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`VerdeVida ON na porta ${PORT}`));
